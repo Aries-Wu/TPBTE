@@ -5,17 +5,12 @@ import time
 from torch.utils.data import Dataset, DataLoader
 from tpbte import Model
 from embedding import MyDataset
-
 from trainAndtest import train_test
 import pandas as pd
 
 
 
-
-
-# 定义训练的模型
-vocab = 21 # onehot使用多少个词编码氨基酸
-#vocab = 20 # BLOSUM62
+vocab = 21 
 d_model = 512
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
@@ -32,7 +27,7 @@ def single(load_path, param_path, epitope,model,epoch):
     save_p = param_path
     epitope = epitope
     print('Epitope:', epitope)
-    # 1、导入要训练的数据，路径为load_path
+
     path_i = load_path
     data = MyDataset(path_i, emb_type=e_type)
     train_size = int(0.8 * len(data))
@@ -45,7 +40,7 @@ def single(load_path, param_path, epitope,model,epoch):
 
     train_dataset = DataLoader(dataset=train, batch_size=b_size, shuffle=True, drop_last=True)
     test_dataset = DataLoader(dataset=test, batch_size=b_size, shuffle=True, drop_last=False)
-    # 3、训练模型，并保存参数
+
 
     print('')
     start = time.time()
@@ -56,15 +51,14 @@ def single(load_path, param_path, epitope,model,epoch):
     print('the time used is : ', end - start)
     torch.cuda.empty_cache()
 
-    # 4、测试模型，保存测试结果
-    #    导入训练好的模型参数
-    #good_model.load_state_dict(torch.load(save_p))
+
+
     #te_loss, acc, auc, pre, recall, spe, f1, mcc = test_model(good_model, test_dataset, emb_type=e_type)
     print('Accuracy, AUC, precision, recall, specificity, f1, mcc')
     print(acc, auc, pre, recall, spe, f1, mcc)
 
 
-#single('220.csv', '220.pkl', 'LLWNGPMAVN', model1,n_epoch)
+
 
 
 def single_epitope(path):
