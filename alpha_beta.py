@@ -26,27 +26,25 @@ model1 = Model(src_vocab=vocab, tgt_vocab=vocab, emb_type=e_type, N=6, h=8, d_mo
 model1 = model1.to(device)
 good_model = model1
 opt = torch.optim.Adam(model1.parameters(), lr=0.00005, betas=(0.9, 0.98), eps=1e-9)
-n_epoch = 32
+n_epoch = 200
 
 
 def single(load_path, param_path, epitope,model,epoch):
     save_p = param_path
     epitope = epitope
     print('Epitope:', epitope)
-    # 1、导入要训练的数据，路径为load_path
     path_i = load_path
     data = TripleDataset(path_i, emb_type=e_type)
     train_size = int(0.8 * len(data))
     test_size = len(data) - train_size
     train, test = torch.utils.data.random_split(data, [train_size, test_size])
     print(train_size, test_size)
-    b_size = 128
+    b_size = 32
 
 
 
     train_dataset = DataLoader(dataset=train, batch_size=b_size, shuffle=True, drop_last=True)
     test_dataset = DataLoader(dataset=test, batch_size=b_size, shuffle=True, drop_last=False)
-    # 3、训练模型，并保存参数
 
     print('')
     start = time.time()
@@ -57,9 +55,7 @@ def single(load_path, param_path, epitope,model,epoch):
     print('the time used is : ', end - start)
     torch.cuda.empty_cache()
 
-    # 4、测试模型，保存测试结果
-    #    导入训练好的模型参数
-    #good_model.load_state_dict(torch.load(save_p))
+
     #te_loss, acc, auc, pre, recall, spe, f1, mcc = test_model(good_model, test_dataset, emb_type=e_type)
     print('Accuracy, AUC, precision, recall, specificity, f1, mcc')
     print(acc, auc, pre, recall, spe, f1, mcc)
