@@ -5,17 +5,12 @@ import time
 from torch.utils.data import Dataset, DataLoader
 from tpbte import Model
 from embedding import MyDataset, TripleDataset
-
 from trainAndtest import train_test
 import pandas as pd
 
 
 
-
-
-# 定义训练的模型
-vocab = 21 # onehot使用多少个词编码氨基酸
-#vocab = 20 # BLOSUM62
+vocab = 21 
 d_model = 512
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
